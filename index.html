@@ -6,6 +6,12 @@
   <title>DO Transfert — Chauffeur privé & transferts aéroport premium</title>
   <meta name="description" content="Réservez en quelques secondes un chauffeur privé pour vos transferts aéroport, gare, rendez-vous d'affaires et événements. Prix fixe, accueil personnalisé, disponible 24h/24.">
   <meta name="theme-color" content="#0b0b0b">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DO Transfert">
+  <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
   <meta property="og:title" content="DO Transfert — Chauffeur privé premium">
   <meta property="og:description" content="Transferts aéroport, gare et mise à disposition avec chauffeur. Prix fixe, réservation en ligne.">
   <meta property="og:type" content="website">
@@ -37,6 +43,7 @@
     </nav>
     <div class="nav-cta">
       <a class="nav-phone" data-href="phone" href="#"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-brand="phone"></span></a>
+      <button type="button" class="btn btn-outline-light install-btn" data-install hidden><svg aria-hidden="true"><use href="#i-download"/></svg>Installer l'app</button>
       <a href="#reserver" class="btn btn-primary">Réserver</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Ouvrir le menu"><span></span></button>
     </div>
@@ -50,6 +57,7 @@
   <a href="#avis">Avis</a>
   <a href="#faq">FAQ</a>
   <a href="#reserver" class="btn btn-primary btn-block">Réserver un chauffeur</a>
+  <button type="button" class="btn btn-outline-light btn-block" data-install hidden><svg aria-hidden="true"><use href="#i-download"/></svg>Installer l'application</button>
   <div class="mobile-contact">
     <a data-href="phone" href="#" data-brand="phone"></a>
     <a data-href="email" href="#" data-brand="email"></a>

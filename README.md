@@ -39,6 +39,19 @@ sert au calcul des prix.
 Ces services publics et gratuits conviennent à un trafic modéré. Pour un usage intensif, remplacez les URL de
 `map` dans `config.js` par votre propre instance ou par un fournisseur avec clé API (Mapbox, OpenRouteService…).
 
+## Application installable (PWA)
+
+Le site est une Progressive Web App : sur mobile comme sur ordinateur, le navigateur propose de l'installer
+(bouton « Installer l'app » dans l'en-tête et le menu mobile, ou menu du navigateur ; sur iPhone : Partager ›
+« Sur l'écran d'accueil »). L'application s'ouvre alors en plein écran, avec son icône.
+
+- `manifest.webmanifest` : nom, couleurs, icônes (`assets/img/icons/`) et raccourcis.
+- `sw.js` : service worker. Les pages et fichiers du site restent disponibles hors ligne ; sans connexion, une page
+  `offline.html` propose de réessayer ou d'appeler. Carte, itinéraire et recherche d'adresses restent en ligne.
+- **À chaque mise en ligne**, incrémentez `VERSION` dans `sw.js` (`dot-v2`, `dot-v3`…) pour que les visiteurs
+  reçoivent les nouveaux fichiers.
+- Le service worker ne fonctionne qu'en HTTPS (ou sur `localhost`). Remplacez aussi les icônes par votre logo officiel.
+
 ## Logo
 
 Déposez le logo (PNG ou SVG, fond transparent de préférence) dans `assets/img/` et indiquez son chemin dans

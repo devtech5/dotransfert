@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hors ligne — DO Transfert</title>
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="robots" content="noindex">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .offline { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 40px var(--gutter); }
+    .offline .logo { justify-content: center; margin-bottom: 36px; }
+    .offline h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(34px, 6vw, 52px); }
+    .offline p { color: var(--muted-on-dark); max-width: 460px; margin: 14px auto 28px; }
+    .offline .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  </style>
+</head>
+<body class="on-dark">
+<script src="assets/js/icons.js"></script>
+<main class="offline">
+  <div>
+    <a href="index.html" class="logo" aria-label="DO Transfert — accueil">
+      <span class="logo-mark">DO</span>
+      <span class="logo-text"><strong>Transfert</strong><small>Chauffeur privé</small></span>
+    </a>
+    <h1>Vous êtes hors ligne</h1>
+    <p>La réservation en ligne a besoin d'une connexion. Réessayez dès que le réseau revient, ou appelez-nous : notre équipe répond 24h/24.</p>
+    <div class="btns">
+      <button type="button" class="btn btn-primary" onclick="location.reload()">Réessayer</button>
+      <a class="btn btn-outline-light" data-href="phone" href="#"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-brand="phone"></span></a>
+    </div>
+  </div>
+</main>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

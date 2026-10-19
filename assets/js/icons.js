@@ -34,6 +34,7 @@
     tag: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
     "chev-left": '<path d="M15 18l-6-6 6-6"/>',
     "chev-right": '<path d="M9 18l6-6-6-6"/>',
+    download: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
     sign: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v5M8 21h8M7 9h10M7 12h6"/>',
     leaf: '<path d="M11 20A7 7 0 0 1 4 13c0-6 6-9 16-9 0 10-3 16-9 16zM4 20c4-4 7-6 11-8"/>',
     radar: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/><path d="M12 12l6-6"/>',
