@@ -585,7 +585,40 @@
     });
   }
 
+  /* ---------- Application installable (PWA) ---------- */
+  function initPWA() {
+    if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js").catch(function () { /* aperçu ou navigateur sans support */ });
+      });
+    }
+
+    // Bouton « Installer l'application » : affiché seulement quand le navigateur le propose
+    var deferred = null;
+    var buttons = $$("[data-install]");
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferred = e;
+      buttons.forEach(function (b) { b.hidden = false; });
+    });
+    window.addEventListener("appinstalled", function () {
+      deferred = null;
+      buttons.forEach(function (b) { b.hidden = true; });
+    });
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!deferred) return;
+        deferred.prompt();
+        deferred.userChoice.finally(function () {
+          deferred = null;
+          buttons.forEach(function (x) { x.hidden = true; });
+        });
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    initPWA();
     fillBrand();
     initHeader();
     initHome();
