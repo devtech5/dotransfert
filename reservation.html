@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Réservation — DO Transfert</title>
+  <meta name="description" content="Choisissez votre véhicule, indiquez vos coordonnées et confirmez votre trajet avec chauffeur privé.">
+  <meta name="theme-color" content="#0a0c10">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="page-booking">
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<header class="site-header solid">
+  <div class="container nav">
+    <a href="index.html" class="logo" aria-label="DO Transfert — accueil">
+      <span class="logo-mark">DO</span>
+      <span class="logo-text"><strong>Transfert</strong><small>Chauffeur privé</small></span>
+    </a>
+    <div class="nav-cta">
+      <a class="nav-phone" data-href="phone" href="#" style="display:inline-flex"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-brand="phone"></span></a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="booking-hero">
+    <div class="container">
+      <span class="eyebrow" style="color: var(--gold)">Réservation</span>
+      <h1 id="booking-title">Choisissez votre véhicule</h1>
+      <ol class="stepper" aria-label="Étapes de la réservation">
+        <li data-step="1"><span>Véhicule</span></li>
+        <li data-step="2"><span>Coordonnées</span></li>
+        <li data-step="3"><span>Confirmation</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="container booking-layout">
+    <div class="panel" id="panel" tabindex="-1">
+
+      <!-- Étape 0 : trajet manquant ou modification -->
+      <section class="step-panel" data-panel="trip" hidden>
+        <h2>Votre trajet</h2>
+        <p class="lead">Indiquez votre trajet pour voir les véhicules disponibles et leurs tarifs.</p>
+        <div class="light-form" id="trip-form"></div>
+      </section>
+
+      <!-- Étape 1 : véhicule -->
+      <section class="step-panel" data-panel="1" hidden>
+        <h2>Choisissez votre véhicule</h2>
+        <p class="lead">Tous nos tarifs incluent péages, attente et suivi de vol.</p>
+        <div class="alert" id="quote-alert" hidden>
+          <svg><use href="#i-info"/></svg>
+          <span>Nous n'avons pas pu estimer automatiquement la distance de ce trajet. Envoyez votre demande : nous vous confirmons le prix exact très rapidement.</span>
+        </div>
+        <div class="vehicle-options" id="vehicle-options" role="radiogroup" aria-label="Véhicules"></div>
+        <div class="panel-actions">
+          <a href="index.html#reserver" class="btn btn-ghost"><svg><use href="#i-arrow-left"/></svg>Retour</a>
+          <button type="button" class="btn btn-dark" data-next="2">Continuer <svg class="arrow"><use href="#i-arrow"/></svg></button>
+        </div>
+      </section>
+
+      <!-- Étape 2 : coordonnées -->
+      <section class="step-panel" data-panel="2" hidden>
+        <h2>Vos coordonnées</h2>
+        <p class="lead">Elles sont transmises uniquement à votre chauffeur.</p>
+        <form class="light-form" id="details-form" novalidate>
+          <div class="form-section">
+            <h3>Passager principal</h3>
+            <div class="field-row">
+              <div class="field" data-field="firstName">
+                <label class="field-label" for="firstName">Prénom</label>
+                <div class="input-wrap"><svg class="icon"><use href="#i-user"/></svg><input class="input" id="firstName" name="firstName" autocomplete="given-name" required></div>
+                <p class="field-error" role="alert">Indiquez votre prénom.</p>
+              </div>
+              <div class="field" data-field="lastName">
+                <label class="field-label" for="lastName">Nom</label>
+                <div class="input-wrap"><input class="input" id="lastName" name="lastName" autocomplete="family-name" required></div>
+                <p class="field-error" role="alert">Indiquez votre nom.</p>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field" data-field="email">
+                <label class="field-label" for="email">E-mail</label>
+                <div class="input-wrap"><svg class="icon"><use href="#i-mail"/></svg><input class="input" id="email" name="email" type="email" autocomplete="email" required></div>
+                <p class="field-error" role="alert">Indiquez une adresse e-mail valide.</p>
+              </div>
+              <div class="field" data-field="phone">
+                <label class="field-label" for="phone">Téléphone</label>
+                <div class="input-wrap"><svg class="icon"><use href="#i-phone"/></svg><input class="input" id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+33 6 12 34 56 78" required></div>
+                <p class="field-error" role="alert">Indiquez un numéro de téléphone valide.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Détails du trajet</h3>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label" for="flight">N° de vol ou de train <small style="text-transform:none;letter-spacing:0">(facultatif)</small></label>
+                <div class="input-wrap"><svg class="icon"><use href="#i-plane"/></svg><input class="input" id="flight" name="flight" placeholder="ex. AF1234"></div>
+              </div>
+              <div class="field">
+                <label class="field-label" for="signName">Nom sur la pancarte <small style="text-transform:none;letter-spacing:0">(facultatif)</small></label>
+                <div class="input-wrap"><svg class="icon"><use href="#i-sign"/></svg><input class="input" id="signName" name="signName"></div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="notes">Message au chauffeur <small style="text-transform:none;letter-spacing:0">(facultatif)</small></label>
+              <textarea class="input" id="notes" name="notes" placeholder="Adresse précise, étage, besoins particuliers…"></textarea>
+            </div>
+
+            <div id="return-block">
+              <div class="switch-row">
+                <div><strong>Ajouter le trajet retour</strong><small>Profitez de <span id="return-discount"></span> de remise sur l'aller-retour</small></div>
+                <label class="switch"><input type="checkbox" id="returnTrip" name="returnTrip" aria-label="Ajouter le trajet retour"><span class="track"></span></label>
+              </div>
+              <div class="field-row keep" id="return-fields" hidden style="margin-top:12px">
+                <div class="field" data-field="returnDate">
+                  <label class="field-label" for="returnDate">Date du retour</label>
+                  <div class="input-wrap"><svg class="icon"><use href="#i-calendar"/></svg><input class="input" id="returnDate" name="returnDate" type="date"></div>
+                  <p class="field-error" role="alert">Choisissez une date de retour.</p>
+                </div>
+                <div class="field" data-field="returnTime">
+                  <label class="field-label" for="returnTime">Heure du retour</label>
+                  <div class="input-wrap"><svg class="icon"><use href="#i-clock"/></svg><input class="input" id="returnTime" name="returnTime" type="time" step="300"></div>
+                  <p class="field-error" role="alert">Le retour doit avoir lieu après l'aller.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Options</h3>
+            <div id="extras"></div>
+          </div>
+
+          <div class="panel-actions">
+            <button type="button" class="btn btn-ghost" data-next="1"><svg><use href="#i-arrow-left"/></svg>Retour</button>
+            <button type="submit" class="btn btn-dark">Vérifier ma réservation <svg class="arrow"><use href="#i-arrow"/></svg></button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Étape 3 : récapitulatif -->
+      <section class="step-panel" data-panel="3" hidden>
+        <h2>Vérifiez et confirmez</h2>
+        <p class="lead">Relisez les informations avant d'envoyer votre réservation.</p>
+        <div id="review"></div>
+        <label class="check" style="margin-top:20px">
+          <input type="checkbox" id="terms">
+          <span>J'accepte les conditions générales de vente et la politique d'annulation (gratuite jusqu'à 24 h avant).</span>
+        </label>
+        <p class="field-error" id="terms-error" role="alert" style="color:var(--danger)">Veuillez accepter les conditions pour continuer.</p>
+        <div class="panel-actions">
+          <button type="button" class="btn btn-ghost" data-next="2"><svg><use href="#i-arrow-left"/></svg>Modifier</button>
+          <button type="button" class="btn btn-gold" id="confirm-btn">Confirmer la réservation <svg class="arrow"><use href="#i-arrow"/></svg></button>
+        </div>
+      </section>
+
+      <!-- Succès -->
+      <section class="step-panel success" data-panel="done" hidden>
+        <div class="success-icon"><svg><use href="#i-check"/></svg></div>
+        <h2>Demande enregistrée</h2>
+        <span class="ref" id="booking-ref"></span>
+        <p class="lead" id="success-text">Envoyez-nous votre réservation en un clic : nous vous confirmons le chauffeur et le véhicule très rapidement.</p>
+        <div class="btns">
+          <a class="btn btn-whatsapp" id="send-whatsapp" target="_blank" rel="noopener"><svg><use href="#i-whatsapp"/></svg>Envoyer par WhatsApp</a>
+          <a class="btn btn-dark" id="send-email"><svg><use href="#i-mail"/></svg>Envoyer par e-mail</a>
+        </div>
+        <p style="margin-top:28px"><a href="index.html" class="service-link">Retour à l'accueil <svg><use href="#i-arrow"/></svg></a></p>
+      </section>
+    </div>
+
+    <aside class="summary" aria-label="Récapitulatif">
+      <div class="summary-card">
+        <h3>Votre trajet</h3>
+        <div class="sum-route" id="sum-route"></div>
+        <ul class="sum-list" id="sum-list"></ul>
+        <div class="sum-total"><span>Total TTC</span><strong id="sum-total">—</strong></div>
+        <p class="sum-note"><svg><use href="#i-info"/></svg><span id="sum-note">Prix fixe : péages, attente et suivi de vol inclus.</span></p>
+        <button type="button" class="sum-edit" id="edit-trip"><svg><use href="#i-edit"/></svg>Modifier le trajet</button>
+      </div>
+      <ul class="summary-assurance">
+        <li><svg><use href="#i-shield"/></svg>Chauffeurs professionnels certifiés</li>
+        <li><svg><use href="#i-clock"/></svg>Annulation gratuite jusqu'à 24 h avant</li>
+        <li><svg><use href="#i-headset"/></svg>Assistance 24h/24 · <a data-href="phone" href="#" data-brand="phone"></a></li>
+      </ul>
+    </aside>
+  </div>
+</main>
+
+<a class="fab" data-href="whatsapp" href="#" aria-label="Nous écrire sur WhatsApp"><svg><use href="#i-whatsapp"/></svg></a>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/booking.js"></script>
+</body>
+</html>

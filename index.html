@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DO Transfert — Chauffeur privé & transferts aéroport premium</title>
+  <meta name="description" content="Réservez en quelques secondes un chauffeur privé pour vos transferts aéroport, gare, rendez-vous d'affaires et événements. Prix fixe, accueil personnalisé, disponible 24h/24.">
+  <meta name="theme-color" content="#0a0c10">
+  <meta property="og:title" content="DO Transfert — Chauffeur privé premium">
+  <meta property="og:description" content="Transferts aéroport, gare et mise à disposition avec chauffeur. Prix fixe, réservation en ligne.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<script src="assets/js/icons.js"></script>
+<a class="skip-link" href="#main">Aller au contenu</a>
+
+<!-- ============ En-tête ============ -->
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="logo" aria-label="DO Transfert — accueil">
+      <span class="logo-mark">DO</span>
+      <span class="logo-text"><strong>Transfert</strong><small>Chauffeur privé</small></span>
+    </a>
+    <nav aria-label="Navigation principale">
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#flotte">Flotte</a></li>
+        <li><a href="#fonctionnement">Comment ça marche</a></li>
+        <li><a href="#avis">Avis</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <a class="nav-phone" data-href="phone" href="#"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-brand="phone"></span></a>
+      <a href="#reserver" class="btn btn-gold">Réserver</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Ouvrir le menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#services">Services</a>
+  <a href="#flotte">Flotte</a>
+  <a href="#fonctionnement">Comment ça marche</a>
+  <a href="#avis">Avis</a>
+  <a href="#faq">FAQ</a>
+  <a href="#reserver" class="btn btn-gold btn-block">Réserver un chauffeur</a>
+  <div class="mobile-contact">
+    <a data-href="phone" href="#" data-brand="phone"></a>
+    <a data-href="email" href="#" data-brand="email"></a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ============ Hero + réservation ============ -->
+  <section class="hero on-dark" id="reserver">
+    <div class="hero-bg" aria-hidden="true">
+      <svg class="hero-lines" viewBox="0 0 1440 900" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="lineGrad" x1="0" x2="1">
+            <stop offset="0" stop-color="#c8a465" stop-opacity="0"/>
+            <stop offset=".5" stop-color="#c8a465" stop-opacity=".7"/>
+            <stop offset="1" stop-color="#c8a465" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M-50 720 C 300 640, 520 820, 860 700 S 1300 520, 1500 600"/>
+        <path d="M-50 790 C 340 700, 600 880, 920 770 S 1320 600, 1500 690"/>
+      </svg>
+    </div>
+    <div class="hero-car" aria-hidden="true" id="hero-car"></div>
+
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="hero-badge reveal">
+          <span class="stars">
+            <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
+          </span>
+          <span><b>4,9/5</b> · plus de 2 000 trajets réalisés</span>
+        </div>
+        <h1 class="reveal" data-delay="1">Votre chauffeur privé,<br><em>l'élégance</em> en chemin.</h1>
+        <p class="lead reveal" data-delay="2">Transferts aéroport et gare, rendez-vous d'affaires, événements : un chauffeur professionnel vous attend, à l'heure, au prix fixé à la réservation.</p>
+        <ul class="hero-points reveal" data-delay="3">
+          <li><svg><use href="#i-tag"/></svg>Prix fixe, sans surprise</li>
+          <li><svg><use href="#i-plane"/></svg>Suivi des vols en temps réel</li>
+          <li><svg><use href="#i-clock"/></svg>Attente offerte à l'arrivée</li>
+        </ul>
+      </div>
+
+      <div class="booking-card reveal" data-delay="2">
+        <h2>Réservez votre trajet</h2>
+        <p class="sub">Tarif immédiat, confirmation en quelques minutes.</p>
+        <div id="hero-booking"></div>
+        <p class="booking-foot"><svg><use href="#i-lock"/></svg>Annulation gratuite jusqu'à 24 h avant</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Bandeau de confiance ============ -->
+  <section class="trust" aria-label="Chiffres clés">
+    <div class="container trust-inner">
+      <div class="trust-item"><span class="trust-icon"><svg><use href="#i-award"/></svg></span><div><strong>10+</strong><span>ans d'expérience</span></div></div>
+      <div class="trust-item"><span class="trust-icon"><svg><use href="#i-users"/></svg></span><div><strong>2 000+</strong><span>clients satisfaits</span></div></div>
+      <div class="trust-item"><span class="trust-icon"><svg><use href="#i-clock"/></svg></span><div><strong>24/7</strong><span>service & assistance</span></div></div>
+      <div class="trust-item"><span class="trust-icon"><svg><use href="#i-star"/></svg></span><div><strong>4,9</strong><span>note moyenne clients</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ Comment ça marche ============ -->
+  <section class="section" id="fonctionnement">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Simple & rapide</span>
+        <h2 class="section-title">Réservez en <em>trois étapes</em></h2>
+        <p class="lead">Moins d'une minute pour réserver. Ensuite, on s'occupe de tout.</p>
+      </div>
+      <div class="steps">
+        <article class="step reveal">
+          <span class="step-num">01</span>
+          <div class="step-icon"><svg><use href="#i-route"/></svg></div>
+          <h3>Indiquez votre trajet</h3>
+          <p>Lieu de départ, destination, date et heure. Le prix s'affiche tout de suite, sans frais cachés.</p>
+        </article>
+        <article class="step reveal" data-delay="1">
+          <span class="step-num">02</span>
+          <div class="step-icon"><svg><use href="#i-sparkle"/></svg></div>
+          <h3>Choisissez votre véhicule</h3>
+          <p>Berline, SUV ou van : choisissez selon le nombre de passagers et de bagages, et le niveau de confort voulu.</p>
+        </article>
+        <article class="step reveal" data-delay="2">
+          <span class="step-num">03</span>
+          <div class="step-icon"><svg><use href="#i-check"/></svg></div>
+          <h3>Profitez du voyage</h3>
+          <p>Votre chauffeur suit votre vol, vous accueille avec une pancarte à votre nom et s'occupe de vos bagages.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Flotte ============ -->
+  <section class="section on-dark" id="flotte">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Notre flotte</span>
+        <h2 class="section-title">Des véhicules <em>d'exception</em>, à chaque trajet</h2>
+        <p class="lead">Véhicules récents, entretenus avec soin et conduits par des chauffeurs professionnels en tenue.</p>
+      </div>
+      <div class="fleet-grid" id="fleet-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ Services ============ -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Nos services</span>
+        <h2 class="section-title">Un chauffeur pour <em>chaque occasion</em></h2>
+        <p class="lead">Un trajet ou une journée entière, seul ou en groupe : le même niveau d'exigence à chaque fois.</p>
+      </div>
+      <div class="services-grid">
+        <article class="service wide reveal">
+          <div class="service-icon"><svg><use href="#i-plane"/></svg></div>
+          <h3>Transferts aéroport</h3>
+          <p>Accueil personnalisé en zone d'arrivée, suivi de votre vol et 60 minutes d'attente offertes. Votre chauffeur s'adapte en cas de retard, sans supplément.</p>
+          <a href="#reserver" class="service-link" data-prefill="Aéroport Paris-Charles de Gaulle (CDG)|Paris centre — Champs-Élysées">Réserver un transfert <svg><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="service reveal" data-delay="1">
+          <div class="service-icon"><svg><use href="#i-train"/></svg></div>
+          <h3>Transferts gare</h3>
+          <p>Prise en charge sur le quai ou au point de rendez-vous, aide aux bagages, trajet direct jusqu'à votre adresse.</p>
+          <a href="#reserver" class="service-link" data-prefill="Gare de Lyon, Paris|">Réserver <svg><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="service reveal">
+          <div class="service-icon"><svg><use href="#i-hourglass"/></svg></div>
+          <h3>Mise à disposition</h3>
+          <p>Un chauffeur à vos côtés pour quelques heures ou toute la journée : rendez-vous, shopping, visites.</p>
+          <a href="#reserver" class="service-link" data-prefill="hourly">Réserver à l'heure <svg><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="service reveal" data-delay="1">
+          <div class="service-icon"><svg><use href="#i-briefcase"/></svg></div>
+          <h3>Voyages d'affaires</h3>
+          <p>Ponctualité, discrétion et Wi-Fi à bord. Compte entreprise, facturation mensuelle et chauffeurs dédiés.</p>
+          <a href="#contact" class="service-link">Ouvrir un compte <svg><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="service reveal" data-delay="2">
+          <div class="service-icon"><svg><use href="#i-heart"/></svg></div>
+          <h3>Mariages & événements</h3>
+          <p>Véhicules décorés à la demande et coordination de plusieurs véhicules pour vos invités.</p>
+          <a href="#contact" class="service-link">Demander un devis <svg><use href="#i-arrow"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Pourquoi nous ============ -->
+  <section class="section" style="background: var(--ivory-2);">
+    <div class="container why">
+      <div class="why-visual reveal" aria-hidden="true">
+        <svg class="wheel" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="100" cy="100" r="92"/><circle cx="100" cy="100" r="74" opacity=".6"/>
+          <circle cx="100" cy="100" r="22"/><circle cx="100" cy="100" r="8" fill="currentColor" fill-opacity=".3"/>
+          <path d="M100 78 L100 26 M100 122 L100 174 M78 100 L26 100 M122 100 L174 100 M84 84 L48 48 M116 116 L152 152 M116 84 L152 48 M84 116 L48 152" opacity=".7"/>
+        </svg>
+        <div class="why-float"><span class="dot"><svg><use href="#i-check"/></svg></span>Chauffeur confirmé · arrivée dans 12 min</div>
+        <div class="why-quote">
+          <p>« Le luxe, c'est de ne penser à rien. Nous pensons à tout pour vous. »</p>
+          <span>L'engagement DO Transfert</span>
+        </div>
+      </div>
+      <div>
+        <div class="reveal">
+          <span class="eyebrow">Pourquoi nous choisir</span>
+          <h2 class="section-title">L'exigence d'un service <em>haut de gamme</em></h2>
+          <p class="lead">Chaque trajet est préparé avec soin : itinéraire, accueil, confort à bord. Vous n'avez qu'à vous laisser conduire.</p>
+        </div>
+        <div class="feature-list">
+          <div class="feature reveal">
+            <div class="feature-icon"><svg><use href="#i-tag"/></svg></div>
+            <h4>Prix fixe garanti</h4>
+            <p>Le prix affiché est celui que vous payez. Péages, attente et suivi de vol sont inclus.</p>
+          </div>
+          <div class="feature reveal" data-delay="1">
+            <div class="feature-icon"><svg><use href="#i-shield"/></svg></div>
+            <h4>Chauffeurs certifiés</h4>
+            <p>Professionnels licenciés, sélectionnés pour leur expérience, leur courtoisie et leur discrétion.</p>
+          </div>
+          <div class="feature reveal">
+            <div class="feature-icon"><svg><use href="#i-radar"/></svg></div>
+            <h4>Suivi de vol</h4>
+            <p>Retard ou avance de votre avion : l'heure de prise en charge s'ajuste automatiquement.</p>
+          </div>
+          <div class="feature reveal" data-delay="1">
+            <div class="feature-icon"><svg><use href="#i-headset"/></svg></div>
+            <h4>Assistance 24h/24</h4>
+            <p>Une équipe joignable à toute heure, par téléphone ou WhatsApp, avant et pendant votre trajet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Trajets populaires ============ -->
+  <section class="section on-dark" id="destinations">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Trajets populaires</span>
+        <h2 class="section-title">Nos trajets <em>les plus demandés</em></h2>
+        <p class="lead">Tarifs indicatifs en Berline Business, de jour. Cliquez sur un trajet pour le réserver.</p>
+      </div>
+      <template id="popular-routes">
+Aéroport Paris-Charles de Gaulle (CDG)|Paris centre — Champs-Élysées|Aéroport CDG|Paris centre
+Aéroport Paris-Orly (ORY)|Paris centre — Champs-Élysées|Aéroport d'Orly|Paris centre
+Aéroport Paris-Charles de Gaulle (CDG)|Disneyland Paris|Aéroport CDG|Disneyland Paris
+Aéroport Paris-Beauvais (BVA)|Paris — Opéra / Grands Boulevards|Aéroport de Beauvais|Paris Opéra
+Paris centre — Champs-Élysées|Château de Versailles|Paris centre|Château de Versailles
+Gare de Lyon, Paris|Aéroport Paris-Orly (ORY)|Gare de Lyon|Aéroport d'Orly
+      </template>
+      <div class="routes" id="routes"></div>
+    </div>
+  </section>
+
+  <!-- ============ Avis ============ -->
+  <section class="section" id="avis">
+    <div class="container">
+      <div class="reviews-head">
+        <div class="section-head reveal">
+          <span class="eyebrow">Ils nous font confiance</span>
+          <h2 class="section-title">Ce que disent <em>nos clients</em></h2>
+          <div class="rating-summary">
+            <strong>4,9</strong>
+            <div>
+              <div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+              <span>Note moyenne de nos clients</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews-nav">
+          <button class="icon-btn" type="button" data-reviews="prev" aria-label="Avis précédents"><svg><use href="#i-chev-left"/></svg></button>
+          <button class="icon-btn" type="button" data-reviews="next" aria-label="Avis suivants"><svg><use href="#i-chev-right"/></svg></button>
+        </div>
+      </div>
+      <div class="reviews" tabindex="0" aria-label="Avis clients">
+        <figure class="review">
+          <div class="stars" aria-label="5 étoiles sur 5"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+          <blockquote>« Mon vol avait plus d'une heure de retard, le chauffeur était là quand même, avec le sourire. Service impeccable. »</blockquote>
+          <figcaption class="review-author"><span class="avatar">SL</span><div><strong>Sophie L.</strong><span>Transfert aéroport CDG</span></div></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" aria-label="5 étoiles sur 5"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+          <blockquote>« Nous utilisons DO Transfert pour tous nos invités d'affaires. Ponctualité et discrétion à chaque fois. »</blockquote>
+          <figcaption class="review-author"><span class="avatar">MK</span><div><strong>Marc K.</strong><span>Compte entreprise</span></div></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" aria-label="5 étoiles sur 5"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+          <blockquote>« Van spacieux pour notre famille de six, sièges enfants installés, chauffeur adorable. Je recommande. »</blockquote>
+          <figcaption class="review-author"><span class="avatar">AD</span><div><strong>Aminata D.</strong><span>Van Business · Disneyland</span></div></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" aria-label="5 étoiles sur 5"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+          <blockquote>« La voiture de notre mariage était magnifique et le chauffeur d'une élégance rare. Merci ! »</blockquote>
+          <figcaption class="review-author"><span class="avatar">JR</span><div><strong>Julie & Romain</strong><span>Mariage · Berline Première</span></div></figcaption>
+        </figure>
+        <figure class="review">
+          <div class="stars" aria-label="5 étoiles sur 5"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+          <blockquote>« Réservation en deux minutes, confirmation rapide par WhatsApp, prix respecté. Exactement ce que j'attendais. »</blockquote>
+          <figcaption class="review-author"><span class="avatar">TB</span><div><strong>Thomas B.</strong><span>Transfert gare de Lyon</span></div></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq" style="background: var(--paper);">
+    <div class="container faq-grid">
+      <aside class="faq-aside reveal">
+        <span class="eyebrow">Questions fréquentes</span>
+        <h2 class="section-title">Tout savoir avant de <em>réserver</em></h2>
+        <p class="lead">Vous ne trouvez pas votre réponse ? Notre équipe est joignable à toute heure.</p>
+        <div class="contact-card" id="contact">
+          <strong>Parlons de votre trajet</strong>
+          <p>Devis groupe, compte entreprise, demande spéciale : nous répondons vite.</p>
+          <div class="btns">
+            <a class="btn btn-whatsapp" data-href="whatsapp" href="#"><svg><use href="#i-whatsapp"/></svg>WhatsApp</a>
+            <a class="btn btn-outline-light" data-href="phone" href="#"><svg><use href="#i-phone"/></svg>Appeler</a>
+          </div>
+        </div>
+      </aside>
+      <div class="faq-list reveal" data-delay="1">
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="true">Le prix affiché est-il définitif ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Oui. Le prix est fixé au moment de la réservation et comprend les péages, le temps d'attente prévu et le suivi de vol. Seules les modifications que vous demandez (arrêt supplémentaire, changement d'adresse) peuvent le faire évoluer.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Que se passe-t-il si mon vol est en retard ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Nous suivons votre vol en temps réel grâce au numéro que vous indiquez. Votre chauffeur ajuste son heure d'arrivée sans frais, et 60 minutes d'attente sont offertes après l'atterrissage.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Où vais-je retrouver mon chauffeur ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>À l'aéroport, votre chauffeur vous attend dans le hall d'arrivée avec une pancarte à votre nom. En gare, il vous attend en tête de quai ou au point de rendez-vous indiqué. Vous recevez ses coordonnées avant le départ.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Puis-je annuler ou modifier ma réservation ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>L'annulation est gratuite jusqu'à 24 heures avant la prise en charge. Pour toute modification, contactez-nous par téléphone, e-mail ou WhatsApp en indiquant votre numéro de réservation.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Quels moyens de paiement acceptez-vous ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Carte bancaire, espèces, virement et paiement mobile. Les entreprises peuvent bénéficier d'une facturation mensuelle. Une facture vous est envoyée après chaque trajet.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">Fournissez-vous des sièges enfants ?<span class="plus" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Oui, sièges bébé, sièges enfants et rehausseurs sont disponibles sur demande lors de la réservation, installés avant votre arrivée.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="section" style="padding-top: 0; background: var(--paper);">
+    <div class="container">
+      <div class="cta reveal">
+        <div>
+          <h2>Prêt à voyager <em>autrement</em> ?</h2>
+          <p>Réservez votre chauffeur en moins d'une minute, ou parlez directement à notre équipe.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="#reserver" class="btn btn-gold">Réserver maintenant <svg class="arrow"><use href="#i-arrow"/></svg></a>
+          <a href="#" data-href="phone" class="btn btn-outline-light"><svg><use href="#i-phone"/></svg><span data-brand="phone"></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ Pied de page ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a href="index.html" class="logo"><span class="logo-mark">DO</span><span class="logo-text"><strong>Transfert</strong><small>Chauffeur privé</small></span></a>
+        <p>Transferts et mise à disposition de véhicules avec chauffeur. Un service premium, ponctuel et discret, 24h/24.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg><use href="#i-instagram"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg><use href="#i-facebook"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg><use href="#i-linkedin"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Transferts aéroport</a></li>
+          <li><a href="#services">Transferts gare</a></li>
+          <li><a href="#services">Mise à disposition</a></li>
+          <li><a href="#services">Voyages d'affaires</a></li>
+          <li><a href="#services">Mariages & événements</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Entreprise</h4>
+        <ul>
+          <li><a href="#flotte">Notre flotte</a></li>
+          <li><a href="#fonctionnement">Comment ça marche</a></li>
+          <li><a href="#avis">Avis clients</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><svg><use href="#i-phone"/></svg><a data-href="phone" href="#" data-brand="phone"></a></li>
+          <li><svg><use href="#i-mail"/></svg><a data-href="email" href="#" data-brand="email"></a></li>
+          <li><svg><use href="#i-pin"/></svg><span data-brand="address"></span></li>
+          <li><svg><use href="#i-clock"/></svg><span data-brand="hours"></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span data-year></span> DO Transfert. Tous droits réservés.</p>
+      <div class="pay" aria-label="Moyens de paiement"><span>VISA</span><span>MASTERCARD</span><span>AMEX</span><span>ESPÈCES</span><span>VIREMENT</span></div>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" data-href="whatsapp" href="#" aria-label="Nous écrire sur WhatsApp"><svg><use href="#i-whatsapp"/></svg></a>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  DOT.onReady = function () {
+    DOT.$("#hero-car").innerHTML = DOT.vehicleSVG("sedan");
+  };
+</script>
+</body>
+</html>
