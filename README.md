@@ -50,7 +50,7 @@ python3 -m http.server 8080
 
 ## Design
 
-- Palette noir profond / champagne / ivoire, typographies *Cormorant Garamond* (titres) et *Manrope* (texte).
+- Palette noir / orange / ivoire (variables `--ink`, `--accent`… en tête de `assets/css/styles.css`), typographies *Cormorant Garamond* (titres) et *Manrope* (texte).
 - Illustrations de véhicules et icônes en SVG (aucune image externe à charger).
 - Responsive du mobile au grand écran, navigation clavier, autocomplétion accessible (ARIA combobox),
   respect de `prefers-reduced-motion`.

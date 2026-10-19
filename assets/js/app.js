@@ -310,7 +310,7 @@
       '<div class="input-wrap">' + DOT.icon("luggage", "icon") +
       '<select class="input" id="' + p + '-bags" name="bags">' + options(0, maxPax, t.bags, function (n) { return n > 1 ? "bagages" : "bagage"; }) + "</select></div></div>" +
       "</div>" +
-      '<button type="submit" class="btn btn-gold btn-block">' + (opts.submitLabel || "Voir les tarifs") + DOT.icon("arrow", "arrow") + "</button>" +
+      '<button type="submit" class="btn btn-primary btn-block">' + (opts.submitLabel || "Voir les tarifs") + DOT.icon("arrow", "arrow") + "</button>" +
       "</form>";
 
     var form = $("form", container);
