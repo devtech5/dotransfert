@@ -25,11 +25,30 @@ Les informations commerciales sont toutes dans **`assets/js/config.js`** :
 
 Les « trajets populaires » de l'accueil se modifient dans le bloc `<template id="popular-routes">` de `index.html`.
 
+## Carte et itinéraire
+
+À l'étape « Choix du véhicule », une carte (Leaflet, fournie dans `assets/vendor/leaflet`) affiche le départ (A),
+l'arrivée (B) et l'itinéraire routier, avec la distance et la durée estimée. La distance réelle de l'itinéraire
+sert au calcul des prix.
+
+- **Recherche d'adresses** : le formulaire propose d'abord les lieux de `places`, puis les adresses, hôtels et lieux
+  trouvés en ligne ([Photon](https://photon.komoot.io), données OpenStreetMap).
+- **Itinéraire** : [OSRM](https://project-osrm.org). Si le service ne répond pas, un tracé estimé (en pointillés) est affiché.
+- **Fond de carte** : CARTO Voyager.
+
+Ces services publics et gratuits conviennent à un trafic modéré. Pour un usage intensif, remplacez les URL de
+`map` dans `config.js` par votre propre instance ou par un fournisseur avec clé API (Mapbox, OpenRouteService…).
+
+## Logo
+
+Déposez le logo (PNG ou SVG, fond transparent de préférence) dans `assets/img/` et indiquez son chemin dans
+`brand.logo` de `config.js` : il remplace automatiquement le monogramme « DO » dans l'en-tête et le pied de page.
+
 ## Calcul des prix
 
-- **Transfert** : `max(minimum, prise en charge + prix/km × distance)`. La distance est estimée à vol d'oiseau
-  entre deux lieux de la liste `places`, multipliée par `roadFactor`.
-  Si l'un des lieux saisis n'est pas dans la liste, le véhicule affiche « Sur devis » et la demande reste possible.
+- **Transfert** : `max(minimum, prise en charge + prix/km × distance)`. La distance est celle de l'itinéraire routier ;
+  à défaut, la distance à vol d'oiseau multipliée par `roadFactor`.
+  Si une adresse est introuvable, le véhicule affiche « Sur devis » et la demande reste possible.
 - **Mise à disposition** : `max(minimum, prix horaire × nombre d'heures)`.
 - Majoration de nuit (22 h – 6 h), remise aller-retour, options multipliées par le nombre de trajets ; arrondi aux 5 € supérieurs.
 

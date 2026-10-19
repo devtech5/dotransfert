@@ -175,6 +175,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.04em;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
 }
+.logo-img { height: 46px; width: auto; max-width: 200px; object-fit: contain; }
 .logo-text { display: flex; flex-direction: column; line-height: 1; }
 .logo-text strong { font-family: var(--font-display); font-size: 24px; font-weight: 600; letter-spacing: 0.01em; }
 .logo-text small { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent); margin-top: 4px; }
@@ -658,6 +659,50 @@ input[type="date"].input, input[type="time"].input { color-scheme: dark; }
 .step-panel[hidden] { display: none; }
 #panel:focus { outline: none; }
 
+/* Carte de l'itinéraire */
+.route-map {
+  position: relative; margin-bottom: 24px; border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--line); background: var(--ivory-2); isolation: isolate;
+}
+.map { height: clamp(300px, 34vw, 360px); width: 100%; background: var(--ivory-2); z-index: 0; }
+.map .leaflet-control-attribution { font-size: 10px; background: rgba(255,255,255,0.8); }
+.map .leaflet-control-zoom a { color: var(--ink); }
+.map-status {
+  position: absolute; left: 12px; top: 12px; z-index: 500; max-width: calc(100% - 70px);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 12px; background: var(--ink); color: var(--text-on-dark);
+  font-size: 13px; font-weight: 600; box-shadow: var(--shadow);
+}
+.map-status:empty { display: none; }
+.map-status svg { width: 16px; height: 16px; color: var(--accent); flex: none; }
+.map-status .stat { display: inline-flex; align-items: center; gap: 6px; }
+.map-status .stat + .stat { padding-left: 10px; border-left: 1px solid var(--line-dark); }
+.map-status .stat b { font-weight: 800; font-size: 14px; }
+.map-status .muted { color: var(--muted-on-dark); font-weight: 600; }
+.map-status.loading svg { animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.3; } }
+
+.map-pin { background: none; border: 0; }
+.map-pin span {
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg); font-weight: 800; font-size: 13px; box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+}
+.map-pin span { font-family: var(--font-body); }
+.map-pin.pin-start span { background: var(--ink); color: var(--accent); border: 2px solid var(--accent); }
+.map-pin.pin-end span { background: var(--accent); color: var(--ink); border: 2px solid var(--ink); }
+.map-pin i { transform: rotate(45deg); font-style: normal; line-height: 1; }
+.route-line { animation: route-in 1.2s var(--ease) both; }
+@keyframes route-in { from { opacity: 0; } to { opacity: 1; } }
+
+.price-loading {
+  display: inline-block; width: 72px; height: 28px; border-radius: 8px;
+  background: linear-gradient(90deg, var(--ivory-2), var(--paper), var(--ivory-2)); background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+.ac-loading { padding: 10px 12px; font-size: 13px; color: var(--muted); }
+
 .vehicle-options { display: grid; gap: 14px; }
 .v-option { position: relative; }
 .v-option input { position: absolute; opacity: 0; pointer-events: none; }
@@ -801,7 +846,7 @@ input[type="date"].input, input[type="time"].input { color-scheme: dark; }
   .cta { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .booking-layout { grid-template-columns: minmax(0, 1fr); }
-  .summary { position: static; order: -1; }
+  .summary { position: static; }
   .page-booking .fab { display: none; }
   .v-option label { grid-template-columns: 120px 1fr auto; gap: 16px; }
 }

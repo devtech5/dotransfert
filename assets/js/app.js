@@ -63,10 +63,84 @@
     return 2 * R * Math.asin(Math.sqrt(h));
   }
 
-  DOT.distanceKm = function (from, to) {
-    var a = DOT.findPlace(from), b = DOT.findPlace(to);
+  DOT.parseCoord = function (str) {
+    var m = String(str || "").split(",").map(parseFloat);
+    return m.length === 2 && isFinite(m[0]) && isFinite(m[1]) ? { lat: m[0], lng: m[1] } : null;
+  };
+
+  // Coordonnées d'un lieu : position choisie dans l'autocomplétion, sinon liste « places ».
+  DOT.coordsFor = function (name, coord) {
+    return DOT.parseCoord(coord) || DOT.findPlace(name);
+  };
+
+  // Distance routière estimée (vol d'oiseau × facteur) quand l'itinéraire réel n'est pas connu.
+  DOT.distanceKm = function (from, to, fromCoord, toCoord) {
+    var a = DOT.coordsFor(from, fromCoord), b = DOT.coordsFor(to, toCoord);
     if (!a || !b) return null;
     return Math.max(3, Math.round(haversine(a, b) * C.roadFactor));
+  };
+
+  /* ---------- Services cartographiques (géocodage, itinéraire) ---------- */
+  function fetchJSON(url, ms) {
+    var ctrl = "AbortController" in window ? new AbortController() : null;
+    var timer = ctrl && setTimeout(function () { ctrl.abort(); }, ms || 10000);
+    return fetch(url, ctrl ? { signal: ctrl.signal } : {})
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .finally(function () { clearTimeout(timer); });
+  }
+
+  function photonType(p) {
+    if (p.osm_key === "aeroway") return "airport";
+    if (p.osm_key === "railway" || p.osm_value === "station") return "station";
+    if (p.osm_key === "tourism" && /hotel|hostel|guest_house/.test(p.osm_value)) return "hotel";
+    if (p.type === "city" || p.type === "district" || p.osm_key === "place") return "city";
+    return "address";
+  }
+
+  // Recherche d'adresses (Photon) : renvoie [{ name, sub, type, lat, lng }]
+  DOT.geocodeSearch = function (q, limit) {
+    var M = C.map || {};
+    if (!M.geocoder || String(q).trim().length < 3) return Promise.resolve([]);
+    var params = new URLSearchParams({ q: q, limit: String(limit || 5) });
+    if (M.geocoderLang) params.set("lang", M.geocoderLang);
+    if (M.center) { params.set("lat", M.center[0]); params.set("lon", M.center[1]); }
+    if (M.geocoderBbox) params.set("bbox", M.geocoderBbox);
+    return fetchJSON(M.geocoder + "?" + params.toString(), 6000).then(function (data) {
+      return (data.features || []).map(function (f) {
+        var p = f.properties || {}, c = f.geometry.coordinates;
+        var street = [p.housenumber, p.street].filter(Boolean).join(" ");
+        var name = p.name || street || p.city || "";
+        var sub = [p.name && street, p.postcode, p.city !== name && p.city, p.country].filter(Boolean).join(", ");
+        return { name: sub ? name + ", " + [p.postcode, p.city].filter(Boolean).join(" ") : name, label: name, sub: sub, type: photonType(p), lat: c[1], lng: c[0] };
+      }).filter(function (r) { return r.label; });
+    });
+  };
+
+  // Itinéraire routier : { km, minutes, coords: [[lat, lng], …], exact }
+  DOT.route = function (a, b) {
+    var M = C.map || {};
+    var straight = function () {
+      var km = Math.max(3, Math.round(haversine(a, b) * C.roadFactor));
+      return { km: km, minutes: Math.round(km / 45 * 60) + 5, coords: [[a.lat, a.lng], [b.lat, b.lng]], exact: false };
+    };
+    if (!M.routing) return Promise.resolve(straight());
+    var url = M.routing.replace("{from}", a.lng + "," + a.lat).replace("{to}", b.lng + "," + b.lat);
+    return fetchJSON(url, 10000).then(function (data) {
+      var r = data.routes && data.routes[0];
+      if (!r) return straight();
+      return {
+        km: Math.max(1, Math.round(r.distance / 1000)),
+        minutes: Math.max(1, Math.round(r.duration / 60)),
+        coords: r.geometry.coordinates.map(function (c) { return [c[1], c[0]]; }),
+        exact: true,
+      };
+    }).catch(straight);
+  };
+
+  DOT.formatDuration = function (min) {
+    if (min < 60) return min + " min";
+    var h = Math.floor(min / 60), m = min % 60;
+    return h + " h" + (m ? " " + (m < 10 ? "0" : "") + m : "");
   };
 
   /* ---------- Tarification ---------- */
@@ -84,7 +158,7 @@
     if (trip.mode === "hourly") {
       legBase = Math.max(vehicle.minimum, vehicle.perHour * (parseInt(trip.hours, 10) || 2));
     } else {
-      km = DOT.distanceKm(trip.from, trip.to);
+      km = trip.routeKm != null ? trip.routeKm : DOT.distanceKm(trip.from, trip.to, trip.fromCoord, trip.toCoord);
       if (km == null) return null;
       legBase = Math.max(vehicle.minimum, vehicle.base + vehicle.perKm * km);
     }
@@ -152,6 +226,12 @@
       a.target = "_blank"; a.rel = "noopener";
     });
     $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+    // Logo officiel : remplace le monogramme par l'image fournie dans la configuration
+    if (b.logo) {
+      $$(".logo").forEach(function (el) {
+        el.innerHTML = '<img class="logo-img" src="' + DOT.esc(b.logo) + '" alt="' + DOT.esc(b.name) + '">';
+      });
+    }
   }
 
   /* ---------- En-tête & menu mobile ---------- */
@@ -188,8 +268,8 @@
   }
 
   /* ---------- Autocomplétion accessible ---------- */
-  var typeIcon = { airport: "plane", station: "train", business: "briefcase", leisure: "sparkle", city: "pin" };
-  var typeLabel = { airport: "Aéroport", station: "Gare", business: "Affaires", leisure: "Loisirs", city: "Ville" };
+  var typeIcon = { airport: "plane", station: "train", business: "briefcase", leisure: "sparkle", city: "pin", hotel: "briefcase", address: "pin" };
+  var typeLabel = { airport: "Aéroport", station: "Gare", business: "Affaires", leisure: "Loisirs", city: "Ville", hotel: "Hôtel", address: "Adresse" };
 
   function highlight(text, q) {
     var safe = DOT.esc(text);
@@ -203,9 +283,11 @@
     return safe;
   }
 
+  // Liste locale instantanée + adresses trouvées en ligne (Photon), avec coordonnées GPS.
+  // La position choisie est conservée dans input.dataset.coord (« lat,lng »).
   DOT.autocomplete = function (input) {
     var list = document.getElementById(input.getAttribute("aria-controls"));
-    var active = -1, items = [];
+    var active = -1, items = [], timer = null, seq = 0;
 
     function close() {
       list.classList.remove("open");
@@ -213,17 +295,34 @@
       input.removeAttribute("aria-activedescendant");
       active = -1;
     }
-    function render() {
-      items = DOT.searchPlaces(input.value);
-      if (!items.length) { close(); return; }
+    function draw(loading) {
+      if (!items.length && !loading) { close(); return; }
       list.innerHTML = items.map(function (p, i) {
+        var sub = p.sub || typeLabel[p.type] || "";
         return '<li class="ac-item" role="option" id="' + list.id + "-" + i + '" aria-selected="false" data-i="' + i + '">' +
           DOT.icon(typeIcon[p.type] || "pin") +
-          "<div>" + highlight(p.name, input.value) + "<small>" + (typeLabel[p.type] || "") + "</small></div></li>";
-      }).join("");
+          "<div>" + highlight(p.label || p.name, input.value) + "<small>" + DOT.esc(sub) + "</small></div></li>";
+      }).join("") + (loading ? '<li class="ac-loading" aria-hidden="true">Recherche d\'adresses…</li>' : "");
       list.classList.add("open");
       input.setAttribute("aria-expanded", "true");
       active = -1;
+    }
+    function render() {
+      var q = input.value;
+      items = DOT.searchPlaces(q);
+      clearTimeout(timer);
+      var remote = C.map && C.map.geocoder && q.trim().length >= 3;
+      draw(remote);
+      if (!remote) return;
+      var mine = ++seq;
+      timer = setTimeout(function () {
+        DOT.geocodeSearch(q).then(function (found) {
+          if (mine !== seq) return;
+          var seen = items.map(function (p) { return normalize(p.name); });
+          items = items.concat(found.filter(function (f) { return seen.indexOf(normalize(f.name)) === -1; })).slice(0, 8);
+          draw(false);
+        }).catch(function () { if (mine === seq) draw(false); });
+      }, 300);
     }
     function setActive(i) {
       var opts = $$(".ac-item", list);
@@ -236,11 +335,15 @@
     function choose(i) {
       if (!items[i]) return;
       input.value = items[i].name;
+      if (items[i].lat != null) input.dataset.coord = items[i].lat.toFixed(6) + "," + items[i].lng.toFixed(6);
+      else delete input.dataset.coord;
+      seq++;
+      clearTimeout(timer);
       close();
       input.dispatchEvent(new Event("change", { bubbles: true }));
     }
 
-    input.addEventListener("input", render);
+    input.addEventListener("input", function () { delete input.dataset.coord; render(); });
     input.addEventListener("focus", render);
     input.addEventListener("blur", function () { setTimeout(close, 150); });
     input.addEventListener("keydown", function (e) {
@@ -315,6 +418,8 @@
 
     var form = $("form", container);
     var mode = t.mode === "hourly" ? "hourly" : "transfer";
+    if (t.fromCoord) form.elements.from.dataset.coord = t.fromCoord;
+    if (t.toCoord) form.elements.to.dataset.coord = t.toCoord;
 
     function applyMode() {
       $$("[data-transfer-only]", form).forEach(function (el) { el.hidden = mode === "hourly"; });
@@ -328,8 +433,10 @@
       b.addEventListener("click", function () { mode = b.getAttribute("data-mode"); applyMode(); });
     });
     $(".swap-btn", form).addEventListener("click", function () {
-      var a = form.elements.from, b = form.elements.to, tmp = a.value;
+      var a = form.elements.from, b = form.elements.to, tmp = a.value, tmpC = a.dataset.coord;
       a.value = b.value; b.value = tmp;
+      if (b.dataset.coord) a.dataset.coord = b.dataset.coord; else delete a.dataset.coord;
+      if (tmpC) b.dataset.coord = tmpC; else delete b.dataset.coord;
     });
     DOT.autocomplete(form.elements.from);
     DOT.autocomplete(form.elements.to);
@@ -357,6 +464,8 @@
         mode: mode,
         from: el.from.value.trim(),
         to: mode === "hourly" ? "" : el.to.value.trim(),
+        fromCoord: el.from.dataset.coord || "",
+        toCoord: mode === "hourly" ? "" : el.to.dataset.coord || "",
         hours: mode === "hourly" ? el.hours.value : "",
         date: el.date.value,
         time: el.time.value,
@@ -384,14 +493,14 @@
 
   DOT.tripToQuery = function (t) {
     var q = new URLSearchParams();
-    ["mode", "from", "to", "hours", "date", "time", "pax", "bags"].forEach(function (k) { if (t[k]) q.set(k, t[k]); });
+    ["mode", "from", "to", "fromCoord", "toCoord", "hours", "date", "time", "pax", "bags"].forEach(function (k) { if (t[k]) q.set(k, t[k]); });
     return q.toString();
   };
 
   DOT.tripFromQuery = function (search) {
     var q = new URLSearchParams(search);
     var t = {};
-    ["mode", "from", "to", "hours", "date", "time", "pax", "bags"].forEach(function (k) { if (q.get(k)) t[k] = q.get(k); });
+    ["mode", "from", "to", "fromCoord", "toCoord", "hours", "date", "time", "pax", "bags"].forEach(function (k) { if (q.get(k)) t[k] = q.get(k); });
     return t;
   };
 
@@ -450,6 +559,8 @@
         $('.tab[data-mode="transfer"]', form).click();
         form.elements.from.value = parts[0] || "";
         form.elements.to.value = parts[1] || "";
+        delete form.elements.from.dataset.coord;
+        delete form.elements.to.dataset.coord;
       }
       $("#reserver").scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(function () { (form.elements.from.value ? form.elements.date : form.elements.from).focus({ preventScroll: true }); }, 600);

@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="page-booking">
@@ -56,6 +57,10 @@
       <section class="step-panel" data-panel="1" hidden>
         <h2>Choisissez votre véhicule</h2>
         <p class="lead">Tous nos tarifs incluent péages, attente et suivi de vol.</p>
+        <div class="route-map">
+          <div id="map" class="map" role="region" aria-label="Carte de votre itinéraire"></div>
+          <div class="map-status" id="map-status" aria-live="polite"></div>
+        </div>
         <div class="alert" id="quote-alert" hidden>
           <svg><use href="#i-info"/></svg>
           <span>Nous n'avons pas pu estimer automatiquement la distance de ce trajet. Envoyez votre demande : nous vous confirmons le prix exact très rapidement.</span>
@@ -199,6 +204,7 @@
 
 <a class="fab" data-href="whatsapp" href="#" aria-label="Nous écrire sur WhatsApp"><svg><use href="#i-whatsapp"/></svg></a>
 
+<script src="assets/vendor/leaflet/leaflet.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/booking.js"></script>

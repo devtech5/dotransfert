@@ -7,6 +7,7 @@ window.DOT_CONFIG = {
   brand: {
     name: "DO Transfert",
     tagline: "Chauffeurs privés & transferts premium",
+    logo: "",                          // Chemin du logo officiel, ex. "assets/img/logo.png" (vide = monogramme « DO »)
     phone: "+33 1 00 00 00 00",       // À remplacer par le vrai numéro
     phoneHref: "+33100000000",
     whatsapp: "33600000000",           // Format international sans « + » ni espaces
@@ -21,6 +22,22 @@ window.DOT_CONFIG = {
   // Facultatif : URL d'un service de formulaires (Formspree, Getform, votre API…).
   // Si vide, la réservation est envoyée par WhatsApp ou par e-mail.
   bookingEndpoint: "",
+
+  // Carte, itinéraire et recherche d'adresses (services OpenStreetMap, sans clé API).
+  // Les serveurs publics conviennent à un trafic modéré : pour un fort volume, utilisez
+  // votre propre instance ou un fournisseur payant (Mapbox, OpenRouteService…).
+  map: {
+    center: [48.8566, 2.3522], // Centre par défaut [lat, lng]
+    zoom: 11,
+    tiles: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    // Itinéraire routier (OSRM). {from} et {to} sont remplacés par « lng,lat ».
+    routing: "https://router.project-osrm.org/route/v1/driving/{from};{to}?overview=full&geometries=geojson",
+    // Recherche d'adresses en temps réel (Photon). Mettre "" pour n'utiliser que la liste « places ».
+    geocoder: "https://photon.komoot.io/api/",
+    geocoderLang: "fr",
+    geocoderBbox: "", // Facultatif : « minLng,minLat,maxLng,maxLat » pour limiter la zone de recherche
+  },
 
   // Majoration de nuit (22h–6h) et remise sur l'aller-retour.
   nightSurcharge: 0.15,

@@ -12,6 +12,8 @@
     details: {},
     extras: [],
     step: 1,
+    route: null,    // { km, minutes, coords, exact } une fois l'itinéraire calculé
+    routing: false, // true pendant le calcul
   };
 
   // Récupère la saisie en cours si la page est rechargée sur le même trajet
@@ -25,7 +27,9 @@
   } catch (e) { /* stockage indisponible : on continue sans */ }
 
   function persist() {
-    try { sessionStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* ignoré */ }
+    try {
+      sessionStorage.setItem(STORE, JSON.stringify(state, function (k, v) { return k === "route" || k === "routing" ? undefined : v; }));
+    } catch (e) { /* ignoré */ }
   }
 
   function tripIsComplete(t) {
@@ -40,6 +44,7 @@
   function fullTrip() {
     var d = state.details;
     return Object.assign({}, state.trip, {
+      routeKm: state.route ? state.route.km : undefined,
       returnTrip: state.trip.mode !== "hourly" && d.returnTrip,
       returnDate: d.returnDate,
       returnTime: d.returnTime,
@@ -78,6 +83,7 @@
     });
     $("#booking-title").textContent = titles[step];
     $("#edit-trip").hidden = step === "done";
+    if (step === 1 && map) setTimeout(function () { map.invalidateSize(); fitMap(); }, 60);
     var panel = $("#panel");
     var top = panel.getBoundingClientRect().top + window.scrollY - 100;
     if (window.scrollY > top) window.scrollTo({ top: top, behavior: "smooth" });
@@ -102,7 +108,10 @@
       ["Heure", t.time || "—"],
       ["Passagers", (t.pax || 1) + " · " + (t.bags || 0) + " bagage(s)"],
     ];
-    if (q && q.km) rows.push(["Distance estimée", "~" + q.km + " km"]);
+    if (state.route && t.mode !== "hourly") {
+      rows.push(["Distance", (state.route.exact ? "" : "~") + state.route.km + " km"]);
+      rows.push(["Durée estimée", DOT.formatDuration(state.route.minutes)]);
+    } else if (q && q.km) rows.push(["Distance estimée", "~" + q.km + " km"]);
     if (v) rows.push(["Véhicule", v.name]);
     if (t.returnTrip) rows.push(["Retour", (t.returnDate ? DOT.formatDate(t.returnDate) : "—") + (t.returnTime ? " · " + t.returnTime : "")]);
     C.extras.forEach(function (x) {
@@ -143,11 +152,13 @@
         "<span>" + DOT.icon("sparkle") + DOT.esc(v.perks[0]) + "</span></div>" +
         (ok ? "" : '<p class="capacity-note">Capacité insuffisante pour ' + state.trip.pax + " passager(s) et " + (state.trip.bags || 0) + " bagage(s)</p>") +
         "</div>" +
-        '<div class="v-price">' + (q ? "<strong>" + DOT.money(q.total) + "</strong><small>" + (q.ret ? "aller-retour" : "prix fixe") + "</small>" : "<strong style=\"font-size:22px\">Sur devis</strong><small>réponse rapide</small>") + "</div>" +
+        '<div class="v-price">' + (q ? "<strong>" + DOT.money(q.total) + "</strong><small>" + (q.ret ? "aller-retour" : "prix fixe") + "</small>"
+          : state.routing ? '<span class="price-loading" aria-label="Calcul du prix"></span><small>calcul…</small>'
+          : "<strong style=\"font-size:22px\">Sur devis</strong><small>réponse rapide</small>") + "</div>" +
         "</label></div>";
     }).join("");
 
-    $("#quote-alert").hidden = anyQuote;
+    $("#quote-alert").hidden = anyQuote || state.routing;
     $('[data-panel="1"] [data-next="2"]').disabled = !state.vehicleId;
 
     $$('input[name="vehicle"]', host).forEach(function (r) {
@@ -333,6 +344,102 @@
     });
   }
 
+  /* ---------- Carte & itinéraire ---------- */
+  var map = null, layer = null, bounds = null;
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#ff7a00";
+  }
+
+  function pin(letter, cls) {
+    return L.divIcon({ className: "map-pin " + cls, html: "<span><i>" + letter + "</i></span>", iconSize: [34, 34], iconAnchor: [17, 34] });
+  }
+
+  function initMap() {
+    if (map || !window.L) return;
+    var M = C.map;
+    map = L.map("map", { scrollWheelZoom: false, zoomControl: false, attributionControl: true }).setView(M.center, M.zoom);
+    L.control.zoom({ position: "topright", zoomInTitle: "Zoom avant", zoomOutTitle: "Zoom arrière" }).addTo(map);
+    L.tileLayer(M.tiles, { attribution: M.attribution, maxZoom: 19, subdomains: "abcd" }).addTo(map);
+    layer = L.layerGroup().addTo(map);
+    // Molette active seulement après un clic sur la carte (évite de bloquer le défilement de la page)
+    map.on("click", function () { map.scrollWheelZoom.enable(); });
+    map.on("mouseout", function () { map.scrollWheelZoom.disable(); });
+  }
+
+  function fitMap() {
+    if (!map || !bounds) return;
+    map.invalidateSize(false);
+    // Marge haute plus grande : le bandeau distance/durée recouvre le haut de la carte
+    if (bounds.isValid && bounds.isValid()) map.fitBounds(bounds, { paddingTopLeft: [40, 90], paddingBottomRight: [40, 36], maxZoom: 14 });
+  }
+
+  function setMapStatus(html, loading) {
+    $("#map-status").innerHTML = html;
+    $("#map-status").classList.toggle("loading", !!loading);
+  }
+
+  function resolvePoint(name, coord) {
+    var known = DOT.coordsFor(name, coord);
+    if (known || !name) return Promise.resolve(known);
+    return DOT.geocodeSearch(name, 1).then(function (r) { return r[0] || null; }).catch(function () { return null; });
+  }
+
+  function drawRoute(a, b, route) {
+    if (!map) return;
+    layer.clearLayers();
+    var pts = [];
+    if (route) {
+      L.polyline(route.coords, { color: "#0b0b0b", weight: 9, opacity: 0.18, lineCap: "round" }).addTo(layer);
+      L.polyline(route.coords, { color: accent(), weight: 5, lineCap: "round", lineJoin: "round", dashArray: route.exact ? null : "8 10", className: "route-line" }).addTo(layer);
+      pts = route.coords;
+    }
+    if (a) { L.marker([a.lat, a.lng], { icon: pin("A", "pin-start"), title: state.trip.from, keyboard: false }).addTo(layer); pts = pts.concat([[a.lat, a.lng]]); }
+    if (b) { L.marker([b.lat, b.lng], { icon: pin("B", "pin-end"), title: state.trip.to, keyboard: false }).addTo(layer); pts = pts.concat([[b.lat, b.lng]]); }
+    if (pts.length === 1) {
+      L.circle(pts[0], { radius: 900, color: accent(), weight: 1, fillOpacity: 0.08 }).addTo(layer);
+      bounds = L.latLng(pts[0]).toBounds(4000);
+    } else if (pts.length) {
+      bounds = L.latLngBounds(pts);
+    }
+    fitMap();
+  }
+
+  function computeRoute() {
+    var t = state.trip;
+    state.route = null;
+    state.routing = true;
+    initMap();
+    if (layer) layer.clearLayers();
+    setMapStatus(DOT.icon("route") + "Calcul de l'itinéraire…", true);
+
+    var hourly = t.mode === "hourly";
+    Promise.all([resolvePoint(t.from, t.fromCoord), hourly ? null : resolvePoint(t.to, t.toCoord)])
+      .then(function (pts) {
+        var a = pts[0], b = pts[1];
+        if (hourly || !a || !b) return { a: a, b: b, route: null };
+        return DOT.route(a, b).then(function (r) { return { a: a, b: b, route: r }; });
+      })
+      .then(function (res) {
+        state.route = res.route;
+        state.routing = false;
+        drawRoute(res.a, res.b, res.route);
+        if (hourly) {
+          setMapStatus(res.a ? DOT.icon("pin") + "Prise en charge · " + DOT.esc(t.hours) + " h de mise à disposition" : DOT.icon("info") + "Adresse de prise en charge à préciser");
+        } else if (res.route) {
+          setMapStatus(
+            '<span class="stat">' + DOT.icon("route") + "<b>" + (res.route.exact ? "" : "~") + res.route.km + " km</b></span>" +
+            '<span class="stat">' + DOT.icon("clock") + "<b>" + DOT.formatDuration(res.route.minutes) + "</b></span>" +
+            (res.route.exact ? '<span class="stat muted">Itinéraire le plus rapide</span>' : '<span class="stat muted">Tracé estimé</span>')
+          );
+        } else {
+          setMapStatus(DOT.icon("info") + "Adresse introuvable sur la carte : le prix vous sera confirmé par notre équipe.");
+        }
+        renderVehicles();
+        renderSummary();
+      });
+  }
+
   /* ---------- Modification du trajet ---------- */
   function openTripEditor() {
     DOT.buildTripForm($("#trip-form"), {
@@ -343,9 +450,10 @@
         state.trip = t;
         history.replaceState(null, "", "reservation.html?" + DOT.tripToQuery(t));
         $("#return-block").hidden = t.mode === "hourly";
+        showStep(1);
+        computeRoute();
         renderVehicles();
         renderSummary();
-        showStep(1);
       },
     });
     showStep("trip");
@@ -375,6 +483,7 @@
       openTripEditor();
       return;
     }
+    computeRoute();
     renderVehicles();
     renderSummary();
     showStep(1);
